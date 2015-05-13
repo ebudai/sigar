@@ -1,2 +1,10 @@
+This is a fork from sigar to enable its use with Biicode
+
+Fork Github repository: https://github.com/rob100/sigar
+
+Original Github repository: https://github.com/hyperic/sigar
+
+Note: This version currently only works with win32 and linux
+
 Visit the SIGAR Wiki for documentation, bugs, support, etc.:
 http://sigar.hyperic.com/

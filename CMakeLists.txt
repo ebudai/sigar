@@ -1,3 +1,48 @@
+IF(BIICODE)
+	SET(SRC_OS_PATH src/os)
+	SET(TESTS_PATH tests)
+	SET(EXAMPLES_PATH examples)
+	IF(WIN32)
+		LIST(REMOVE_ITEM BII_LIB_SRC 
+			${SRC_OS_PATH}/aix/aix_sigar.c 
+			${SRC_OS_PATH}/darwin/darwin_sigar.c  
+			${SRC_OS_PATH}/hpux/hpux_sigar.c 
+			${SRC_OS_PATH}/linux/linux_sigar.c 
+			${SRC_OS_PATH}/solaris/kstats.c 
+			${SRC_OS_PATH}/solaris/get_mib2.c 
+			${SRC_OS_PATH}/solaris/procfs.c 
+			${SRC_OS_PATH}/solaris/solaris_sigar.c)
+	ELSEIF(CMAKE_SYSTEM_NAME STREQUAL "Linux")
+		LIST(REMOVE_ITEM BII_LIB_SRC 
+			${SRC_OS_PATH}/aix/aix_sigar.c 
+			${SRC_OS_PATH}/darwin/darwin_sigar.c  
+			${SRC_OS_PATH}/hpux/hpux_sigar.c 
+			${SRC_OS_PATH}/win32/peb.c
+			${SRC_OS_PATH}/win32/win32_sigar.c 
+			${SRC_OS_PATH}/win32/wmi.cpp 
+			${SRC_OS_PATH}/solaris/kstats.c 
+			${SRC_OS_PATH}/solaris/get_mib2.c 
+			${SRC_OS_PATH}/solaris/procfs.c 
+			${SRC_OS_PATH}/solaris/solaris_sigar.c)
+		# ToDo: Cleanup lists for other operating systems
+	ENDIF()
+	
+	# Remove examples and tests:
+	#LIST(REMOVE_ITEM BII_BLOCK_EXES ${EXAMPLES_PATH}_cpuinfo ${EXAMPLES_PATH}_sigar_ps)
+	#LIST(REMOVE_ITEM BII_BLOCK_EXES ${TESTS_PATH}_t_sigar_cpu ${TESTS_PATH}_t_sigar_fs ${TESTS_PATH}_t_sigar_loadavg ${TESTS_PATH}_t_sigar_mem ${TESTS_PATH}_t_sigar_netconn ${TESTS_PATH}_t_sigar_netif ${TESTS_PATH}_t_sigar_pid ${TESTS_PATH}_t_sigar_proc ${TESTS_PATH}_t_sigar_reslimit ${TESTS_PATH}_t_sigar_swap ${TESTS_PATH}_t_sigar_sysinfo ${TESTS_PATH}_t_sigar_uptime ${TESTS_PATH}_t_sigar_version)
+	
+	ADD_BII_TARGETS()
+	
+	IF(WIN32)
+		TARGET_INCLUDE_DIRECTORIES(${BII_LIB_TARGET} PUBLIC ${SRC_OS_PATH}/win32)
+		TARGET_LINK_LIBRARIES(${BII_LIB_TARGET} PUBLIC ws2_32 netapi32 version)
+	ELSEIF(CMAKE_SYSTEM_NAME STREQUAL "Linux")
+		TARGET_INCLUDE_DIRECTORIES(${BII_LIB_TARGET} PUBLIC ${SRC_OS_PATH}/linux)	
+	ENDIF()
+	
+	RETURN()
+ENDIF()
+
 IF(WIN32) 
 	PROJECT(sigar)
 ELSE()
